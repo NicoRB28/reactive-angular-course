@@ -30,9 +30,13 @@ export class HomeComponent implements OnInit {
   }
 
   reloadCourses(){
+
+    this.loadingService.loadingOn();
+
     const courses$ = this.coursesSerice.loadAllCourses()
     .pipe(
-      map(courses => courses.sort(sortCoursesBySeqNo))
+      map(courses => courses.sort(sortCoursesBySeqNo)),
+      finalize(()=> this.loadingService.loadingOff())//se ejecuta cuando se completa el observable o hay error
     );
   this.beginnerCourses$ = courses$
     .pipe(
